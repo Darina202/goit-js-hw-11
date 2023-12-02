@@ -18,7 +18,9 @@ img {
 
 .search-form {
   text-align: center;
-  padding-top: 24px;
+  padding: 24px;
+  background-color: #0ec3f0;
+  gap: 12px;
 }
 .search-form input {
   font-size: 24px;

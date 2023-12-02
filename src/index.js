@@ -20,7 +20,7 @@ function searchName(event) {
   event.preventDefault();
   const form = event.target;
   inputValue = form.elements.searchQuery.value.trim();
-  console.log(inputValue);
+
   if (inputValue === '') {
     Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
@@ -31,7 +31,6 @@ function searchName(event) {
   fetchImage(inputValue, page)
     .then(data => {
       if (data.hits && data.hits.length > 0) {
-        console.log(data);
         gallery.innerHTML = createGallery(data);
         Notify.info(`Hooray! We found ${data.totalHits} images.`);
         loadBtn.hidden = false;
@@ -68,10 +67,7 @@ function handleLoadMore() {
   loadBtn.disabled = true;
   fetchImage(inputValue, page)
     .then(data => {
-      console.log(data);
-      gallery.insertAdjacentHTML('beforeend', createGallery(data));
-
-      if (data.page * 40 >= data.totalHits) {
+      if (data.page * 40 >= data.totalHits || data.hits.length === 0) {
         loadBtn.hidden = true;
         loadBtn.removeEventListener('click', handleLoadMore);
         Notify.failure(
@@ -79,12 +75,10 @@ function handleLoadMore() {
         );
         return;
       }
+      gallery.insertAdjacentHTML('beforeend', createGallery(data));
       loadBtn.disabled = false;
     })
     .catch(err => {
-      Notify.failure(
-        "We're sorry, but you've reached the end of search results."
-      );
       console.log(err);
     });
 }

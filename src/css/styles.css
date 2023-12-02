@@ -50,6 +50,7 @@ img {
 }
 .photo-card img {
   background-size: cover;
+  height: 300px;
 }
 .info {
   display: flex;

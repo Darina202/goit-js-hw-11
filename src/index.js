@@ -20,12 +20,26 @@ function searchName(event) {
   event.preventDefault();
   const form = event.target;
   inputValue = form.elements.searchQuery.value.trim();
+  console.log(inputValue);
+  if (inputValue === '') {
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    return;
+  }
   page = 1;
   fetchImage(inputValue, page)
     .then(data => {
-      console.log(data);
-      gallery.innerHTML = createGallery(data);
-      loadBtn.hidden = false;
+      if (data.hits && data.hits.length > 0) {
+        console.log(data);
+        gallery.innerHTML = createGallery(data);
+        Notify.info(`Hooray! We found ${data.totalHits} images.`);
+        loadBtn.hidden = false;
+      } else {
+        Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      }
     })
     .catch(err => {
       Notify.failure(

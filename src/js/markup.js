@@ -13,7 +13,7 @@ export function createGallery(data) {
         downloads,
       }) =>
         `<div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" height="300px" loading="lazy" />
+  <img src="${webformatURL}" alt="${tags}"  loading="lazy" />
   <div class="info">
     <p class="info-item">
       <b>Likes</b>${likes}

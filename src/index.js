@@ -6,9 +6,9 @@ import { createGallery } from './js/markup';
 
 const API_KEY = '41017766-9f085fc310f3820f85afb105c';
 const formSearch = document.querySelector('.search-form');
-const searchInput = document.querySelector('input[name="searchQuery"]');
 const gallery = document.querySelector('.gallery');
 const loadBtn = document.querySelector('.load-more');
+
 let page = 1;
 let inputValue;
 loadBtn.hidden = true;
@@ -20,8 +20,8 @@ function searchName(event) {
   event.preventDefault();
   const form = event.target;
   inputValue = form.elements.searchQuery.value.trim();
-
-  fetchImage(inputValue)
+  page = 1;
+  fetchImage(inputValue, page)
     .then(data => {
       console.log(data);
       gallery.innerHTML = createGallery(data);
@@ -35,7 +35,6 @@ function searchName(event) {
     });
 }
 
-const cat = 'cat';
 async function fetchImage(inputValue, page = 1) {
   const BASE_URL = 'https://pixabay.com/api/';
   const params = new URLSearchParams({
@@ -57,9 +56,13 @@ function handleLoadMore() {
     .then(data => {
       console.log(data);
       gallery.insertAdjacentHTML('beforeend', createGallery(data));
-      if (data.page >= data.totalHits) {
+
+      if (data.page * 40 >= data.totalHits) {
         loadBtn.hidden = true;
         loadBtn.removeEventListener('click', handleLoadMore);
+        Notify.failure(
+          "We're sorry, but you've reached the end of search results."
+        );
         return;
       }
       loadBtn.disabled = false;

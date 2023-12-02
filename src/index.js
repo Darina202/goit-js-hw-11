@@ -67,12 +67,13 @@ function handleLoadMore() {
   loadBtn.disabled = true;
   fetchImage(inputValue, page)
     .then(data => {
-      if (data.page * 40 >= data.totalHits || data.hits.length === 0) {
+      if (data.hits.length === 0 || data.page * 40 >= data.totalHits) {
         loadBtn.hidden = true;
         loadBtn.removeEventListener('click', handleLoadMore);
         Notify.failure(
           "We're sorry, but you've reached the end of search results."
         );
+        formSearch.reset();
         return;
       }
       gallery.insertAdjacentHTML('beforeend', createGallery(data));
